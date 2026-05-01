@@ -1,0 +1,13 @@
+{
+  "name": "letters",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "install:all": "cd client && npm install && cd ../server && npm install",
+    "db:push": "cd server && npm run db:push",
+    "db:generate": "cd server && npm run db:generate",
+    "db:studio": "cd server && npm run db:studio"
+  }
+}

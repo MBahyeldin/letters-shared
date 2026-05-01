@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-900 font-sans;
+  }
+
+  * {
+    @apply box-border;
+  }
+}
+
+@layer components {
+  .letter-card {
+    @apply bg-white rounded-2xl shadow-card transition-all duration-300 ease-out;
+  }
+
+  .letter-card:hover {
+    @apply shadow-card-hover -translate-y-0.5;
+  }
+
+  .btn-primary {
+    @apply bg-ink-900 text-white font-medium px-4 py-2 rounded-xl
+           hover:bg-ink-800 active:scale-95 transition-all duration-150
+           focus:outline-none focus:ring-2 focus:ring-ink-900 focus:ring-offset-2;
+  }
+
+  .btn-ghost {
+    @apply text-ink-600 font-medium px-4 py-2 rounded-xl
+           hover:bg-ink-100 active:scale-95 transition-all duration-150
+           focus:outline-none focus:ring-2 focus:ring-ink-200;
+  }
+
+  .btn-danger {
+    @apply text-red-600 font-medium px-4 py-2 rounded-xl
+           hover:bg-red-50 active:scale-95 transition-all duration-150
+           focus:outline-none focus:ring-2 focus:ring-red-200;
+  }
+
+  .input-base {
+    @apply w-full px-3 py-2 bg-ink-50 border border-ink-200 rounded-xl text-ink-900
+           placeholder:text-ink-400 text-sm
+           focus:outline-none focus:ring-2 focus:ring-ink-900 focus:border-transparent
+           transition-all duration-150;
+  }
+}
+
+/* Tiptap prose styles */
+.tiptap-content {
+  @apply text-ink-800 leading-relaxed;
+}
+
+.tiptap-content p {
+  @apply mb-3;
+}
+
+.tiptap-content p:last-child {
+  @apply mb-0;
+}
+
+.tiptap-content h1,
+.tiptap-content h2,
+.tiptap-content h3 {
+  @apply font-serif font-medium text-ink-900 mt-6 mb-2;
+}
+
+.tiptap-content h1 { @apply text-2xl; }
+.tiptap-content h2 { @apply text-xl; }
+.tiptap-content h3 { @apply text-lg; }
+
+.tiptap-content ul {
+  @apply list-disc list-inside mb-3 space-y-1;
+}
+
+.tiptap-content ol {
+  @apply list-decimal list-inside mb-3 space-y-1;
+}
+
+.tiptap-content blockquote {
+  @apply border-l-2 border-ink-200 pl-4 italic text-ink-600 my-4;
+}
+
+.tiptap-content strong { @apply font-semibold; }
+.tiptap-content em { @apply italic; }
+.tiptap-content u { @apply underline; }
+
+.tiptap-content code {
+  @apply font-mono text-sm bg-ink-100 px-1.5 py-0.5 rounded;
+}
+
+.tiptap-content pre {
+  @apply bg-ink-100 rounded-xl p-4 my-4 overflow-x-auto;
+}
+
+.tiptap-content pre code {
+  @apply bg-transparent p-0;
+}
+
+.tiptap-content a {
+  @apply text-blue-600 underline underline-offset-2;
+}
+
+.ProseMirror {
+  @apply min-h-[200px] outline-none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-ink-400 pointer-events-none float-left h-0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-ink-200 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-ink-300;
+}
