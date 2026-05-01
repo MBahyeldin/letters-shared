@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useLettersStore } from '../store/lettersStore';
 import type { WsEvent, Letter } from '../types';
 
-const WS_URL = `ws://${window.location.hostname}:3001`;
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3001'; 
 const RECONNECT_DELAY = 3000;
 
 export function useWebSocket(): void {

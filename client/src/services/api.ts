@@ -1,6 +1,7 @@
 import type { Letter, CreateLetterPayload, UpdateLetterPayload, ReorderPayload } from '../types';
 
-const BASE = '/api/letters';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''; 
+const BASE = `${API_BASE_URL}/api/letters`;
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
