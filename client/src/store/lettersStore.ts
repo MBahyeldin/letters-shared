@@ -207,7 +207,7 @@ export const useLettersStore = create<LettersState>((set, get) => ({
   login: async (username, password) => {
     set({ isAuthLoading: true });
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3001'}/api/auth/login`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001'}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -234,7 +234,7 @@ export const useLettersStore = create<LettersState>((set, get) => ({
 
   logout: async () => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3001'}/api/auth/logout`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001'}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });
