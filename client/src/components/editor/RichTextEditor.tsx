@@ -5,13 +5,7 @@ import {
   useEditor,
   useEditorSelector,
 } from '@portabletext/editor';
-import type {
-  PortableTextBlock,
-  RenderDecoratorFunction,
-  RenderStyleFunction,
-  RenderBlockFunction,
-  RenderListItemFunction,
-} from '@portabletext/editor';
+import type { PortableTextBlock } from '@portabletext/editor';
 import { EventListenerPlugin } from '@portabletext/editor/plugins';
 import {
   isActiveDecorator,
@@ -20,6 +14,7 @@ import {
 } from '@portabletext/editor/selectors';
 import { useMemo, useCallback } from 'react';
 import { clsx } from 'clsx';
+import { renderStyle, renderDecorator, renderBlock, renderListItem } from './portableTextComponents';
 
 interface RichTextEditorProps {
   content: PortableTextBlock[];
@@ -79,49 +74,6 @@ const schemaDefinition = defineSchema({
   inlineObjects: [],
   blockObjects: [],
 });
-
-const renderStyle: RenderStyleFunction = (props) => {
-  const style = props.schemaType.name;
-  switch (style) {
-    case 'h1':
-      return <h1 className="text-2xl font-bold mt-4 mb-2">{props.children}</h1>;
-    case 'h2':
-      return <h2 className="text-xl font-semibold mt-3 mb-2">{props.children}</h2>;
-    case 'h3':
-      return <h3 className="text-lg font-medium mt-2 mb-1">{props.children}</h3>;
-    case 'blockquote':
-      return <blockquote className="border-l-4 border-ink-300 pl-4 italic text-ink-600">{props.children}</blockquote>;
-    default:
-      return <p className="mb-2">{props.children}</p>;
-  }
-};
-
-const renderDecorator: RenderDecoratorFunction = (props) => {
-  switch (props.value) {
-    case 'strong':
-      return <strong>{props.children}</strong>;
-    case 'em':
-      return <em>{props.children}</em>;
-    case 'underline':
-      return <u>{props.children}</u>;
-    case 'strike':
-      return <s className="text-ink-400">{props.children}</s>;
-    case 'highlight':
-      return <mark className="bg-yellow-200 px-0.5 rounded">{props.children}</mark>;
-    case 'code':
-      return <code className="bg-ink-100 px-1 rounded text-sm font-mono">{props.children}</code>;
-    default:
-      return <>{props.children}</>;
-  }
-};
-
-const renderBlock: RenderBlockFunction = (props) => {
-  return <div>{props.children}</div>;
-};
-
-const renderListItem: RenderListItemFunction = (props) => {
-  return <li className="ml-4">{props.children}</li>;
-};
 
 function Toolbar() {
   const editor = useEditor();

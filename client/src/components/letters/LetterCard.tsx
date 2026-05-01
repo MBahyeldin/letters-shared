@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { PortableText, type PortableTextBlock } from '@portabletext/react';
 import { useLettersStore } from '../../store/lettersStore';
 import ConfirmDialog from '../ui/ConfirmDialog';
+import { portableTextComponents } from '../editor/portableTextComponents';
 import type { Letter } from '../../types';
 
 interface LetterCardProps {
@@ -136,8 +137,11 @@ export default function LetterCard({ letter }: LetterCardProps) {
 
           {/* Content preview */}
           {letter.contentJson.length > 0 && (
-            <div className="text-sm text-ink-600 leading-relaxed line-clamp-3">
-              <PortableText value={letter.contentJson as unknown as PortableTextBlock[]} />
+            <div>
+              <PortableText 
+                value={letter.contentJson as unknown as PortableTextBlock[]} 
+                components={portableTextComponents}
+              />
             </div>
           )}
 
