@@ -239,10 +239,7 @@ export default function LetterModal() {
                 : 'Autosaves as you type · ⌘S to save now'}
             </p>
             <div className="flex gap-3">
-              <Button variant="ghost" onClick={closeEditor}>
-                Cancel
-              </Button>
-              <Button variant="primary" loading={isSaving} onClick={save}>
+              <Button variant="primary" loading={isSaving} onClick={() => {closeEditor();save();}}>
                 {isNew ? 'Create letter' : 'Save'}
               </Button>
             </div>

@@ -42,7 +42,7 @@ export default function App() {
         {/* Page heading */}
         <div className="mb-8">
           <h1 className="font-serif text-3xl font-medium text-ink-900 leading-tight">
-            Letter Thread
+            Mini-Mika Letters Thread
           </h1>
           <p className="mt-1 text-sm text-ink-500">
             A shared space for letters between people.
