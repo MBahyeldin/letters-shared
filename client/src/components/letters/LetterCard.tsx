@@ -29,7 +29,7 @@ export default function LetterCard({ letter }: LetterCardProps) {
 
   const formattedDate = (() => {
     try {
-      return format(new Date(letter.letterDate), 'MMMM d, yyyy');
+      return format(new Date(letter.letterDate), 'MMMM d, yyyy h:mm a');
     } catch {
       return '';
     }
@@ -91,7 +91,7 @@ export default function LetterCard({ letter }: LetterCardProps) {
                 {letter.title || 'Untitled'}
               </h2>
               <div className="flex items-center gap-2 mt-1 text-xs text-ink-400">
-                <span>{letter.author}</span>
+                <span>{letter.author?.toUpperCase()}</span>
                 <span>·</span>
                 <time dateTime={letter.letterDate}>{formattedDate}</time>
               </div>
@@ -148,7 +148,7 @@ export default function LetterCard({ letter }: LetterCardProps) {
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-ink-100 flex items-center justify-between text-xs text-ink-400">
             <span>
-              Updated {format(new Date(letter.updatedAt), 'MMM d')}
+              Updated {format(new Date(letter.updatedAt), 'MMM d h:mm a')}
             </span>
             <span className="font-mono">#{letter.position + 1}</span>
           </div>

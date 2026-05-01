@@ -56,7 +56,7 @@ export const useLettersStore = create<LettersState>((set, get) => ({
   fetchLetters: async () => {
     set({ isLoading: true, error: null });
     try {
-      const letters = await api.getLetters();
+      const letters = (await api.getLetters() as Letter[]).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
       set({ letters, isLoading: false });
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Failed to load letters';
