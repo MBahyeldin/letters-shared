@@ -6,6 +6,7 @@ const BASE = `${API_BASE_URL}/api/letters`;
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     ...options,
   });
 

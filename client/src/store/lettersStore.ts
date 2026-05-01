@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { api } from '../services/api';
-import type { Letter, CreateLetterPayload, UpdateLetterPayload, Toast, ToastVariant } from '../types';
+import type { Letter, CreateLetterPayload, UpdateLetterPayload, Toast, ToastVariant, User } from '../types';
 
 let toastCounter = 0;
 
@@ -10,6 +10,9 @@ interface LettersState {
   error: string | null;
   toasts: Toast[];
   activeEditorId: string | null;
+  user: User | null;
+  isAuthLoading: boolean;
+  signInModalOpen: boolean;
 
   // Actions
   fetchLetters: () => Promise<void>;
@@ -31,6 +34,13 @@ interface LettersState {
   // Toasts
   addToast: (message: string, variant?: ToastVariant) => void;
   removeToast: (id: string) => void;
+
+  // Auth
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
+  setUser: (user: User | null) => void;
+  openSignInModal: () => void;
+  closeSignInModal: () => void;
 }
 
 export const useLettersStore = create<LettersState>((set, get) => ({
@@ -39,6 +49,9 @@ export const useLettersStore = create<LettersState>((set, get) => ({
   error: null,
   toasts: [],
   activeEditorId: null,
+  user: null,
+  isAuthLoading: false,
+  signInModalOpen: false,
 
   fetchLetters: async () => {
     set({ isLoading: true, error: null });
@@ -190,4 +203,50 @@ export const useLettersStore = create<LettersState>((set, get) => ({
   removeToast: (id) => {
     set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }));
   },
+
+  login: async (username, password) => {
+    set({ isAuthLoading: true });
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3001'}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        get().addToast(data.error || 'Login failed', 'error');
+        set({ isAuthLoading: false });
+        return false;
+      }
+
+      const user = await response.json();
+      set({ user, isAuthLoading: false });
+      get().addToast(`Welcome, ${user.username}!`, 'success');
+      return true;
+    } catch (err) {
+      get().addToast('Login failed', 'error');
+      set({ isAuthLoading: false });
+      return false;
+    }
+  },
+
+  logout: async () => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3001'}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch {
+      // Ignore errors on logout
+    }
+    set({ user: null });
+    get().addToast('Logged out', 'info');
+  },
+
+  setUser: (user) => set({ user }),
+  
+  openSignInModal: () => set({ signInModalOpen: true }),
+  closeSignInModal: () => set({ signInModalOpen: false }),
 }));

@@ -2,6 +2,9 @@ import { useLettersStore } from '../../store/lettersStore';
 
 export default function Header() {
   const letters = useLettersStore((s) => s.letters);
+  const user = useLettersStore((s) => s.user);
+  const logout = useLettersStore((s) => s.logout);
+  const openSignInModal = useLettersStore((s) => s.openSignInModal);
 
   return (
     <header className="sticky top-0 z-30 bg-ink-50/80 backdrop-blur-md border-b border-ink-100">
@@ -36,6 +39,26 @@ export default function Header() {
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs text-ink-400">Live</span>
           </div>
+          
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-ink-600">{user.username}</span>
+              <button
+                onClick={() => logout()}
+                className="text-xs text-ink-400 hover:text-ink-700 transition-colors"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={openSignInModal}
+              className="px-3 py-1.5 text-sm font-medium text-ink-700 hover:text-ink-900 
+                         bg-ink-100 hover:bg-ink-200 rounded-lg transition-colors"
+            >
+              Sign in
+            </button>
+          )}
         </div>
       </div>
     </header>

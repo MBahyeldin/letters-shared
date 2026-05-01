@@ -7,6 +7,7 @@ import {
   updateLetterSchema,
   reorderSchema,
 } from '../middleware/validation';
+import { requireAuth } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -40,7 +41,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
 });
 
 // POST /api/letters
-router.post('/', validate(createLetterSchema), async (req: Request, res: Response): Promise<void> => {
+router.post('/', requireAuth, validate(createLetterSchema), async (req: Request, res: Response): Promise<void> => {
   try {
     const maxPositionResult = await prisma.letter.aggregate({ _max: { position: true } });
     const nextPosition = (maxPositionResult._max.position ?? -1) + 1;
@@ -65,7 +66,7 @@ router.post('/', validate(createLetterSchema), async (req: Request, res: Respons
 });
 
 // PATCH /api/letters/:id
-router.patch('/:id', validate(updateLetterSchema), async (req: Request, res: Response): Promise<void> => {
+router.patch('/:id', requireAuth, validate(updateLetterSchema), async (req: Request, res: Response): Promise<void> => {
   try {
     const existing = await prisma.letter.findUnique({ where: { id: req.params.id } });
     if (!existing) {
@@ -94,7 +95,7 @@ router.patch('/:id', validate(updateLetterSchema), async (req: Request, res: Res
 });
 
 // DELETE /api/letters/:id
-router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
+router.delete('/:id', requireAuth, async (req: Request, res: Response): Promise<void> => {
   try {
     const existing = await prisma.letter.findUnique({ where: { id: req.params.id } });
     if (!existing) {
@@ -112,7 +113,7 @@ router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
 });
 
 // POST /api/letters/reorder
-router.post('/reorder', validate(reorderSchema), async (req: Request, res: Response): Promise<void> => {
+router.post('/reorder', requireAuth, validate(reorderSchema), async (req: Request, res: Response): Promise<void> => {
   try {
     const { orders } = req.body as { orders: { id: string; position: number }[] };
 

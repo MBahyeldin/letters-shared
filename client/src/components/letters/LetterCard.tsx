@@ -19,6 +19,7 @@ export default function LetterCard({ letter }: LetterCardProps) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const openEditor = useLettersStore((s) => s.openEditor);
   const deleteLetter = useLettersStore((s) => s.deleteLetter);
+  const user = useLettersStore((s) => s.user);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -50,35 +51,37 @@ export default function LetterCard({ letter }: LetterCardProps) {
         )}
       >
         {/* Drag handle */}
-        <button
-          className={clsx(
-            'absolute left-4 top-1/2 -translate-y-1/2',
-            'opacity-0 group-hover:opacity-40 hover:!opacity-80 transition-opacity duration-200',
-            'cursor-grab active:cursor-grabbing p-1 rounded-lg hover:bg-ink-100',
-            'touch-none'
-          )}
-          {...attributes}
-          {...listeners}
-          aria-label="Drag to reorder"
-          tabIndex={-1}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="6" cy="5" r="1.2" fill="currentColor" />
-            <circle cx="10" cy="5" r="1.2" fill="currentColor" />
-            <circle cx="6" cy="8" r="1.2" fill="currentColor" />
-            <circle cx="10" cy="8" r="1.2" fill="currentColor" />
-            <circle cx="6" cy="11" r="1.2" fill="currentColor" />
-            <circle cx="10" cy="11" r="1.2" fill="currentColor" />
-          </svg>
-        </button>
+        {user && (
+          <button
+            className={clsx(
+              'absolute left-4 top-1/2 -translate-y-1/2',
+              'opacity-0 group-hover:opacity-40 hover:!opacity-80 transition-opacity duration-200',
+              'cursor-grab active:cursor-grabbing p-1 rounded-lg hover:bg-ink-100',
+              'touch-none'
+            )}
+            {...attributes}
+            {...listeners}
+            aria-label="Drag to reorder"
+            tabIndex={-1}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="6" cy="5" r="1.2" fill="currentColor" />
+              <circle cx="10" cy="5" r="1.2" fill="currentColor" />
+              <circle cx="6" cy="8" r="1.2" fill="currentColor" />
+              <circle cx="10" cy="8" r="1.2" fill="currentColor" />
+              <circle cx="6" cy="11" r="1.2" fill="currentColor" />
+              <circle cx="10" cy="11" r="1.2" fill="currentColor" />
+            </svg>
+          </button>
+        )}
 
         {/* Card body */}
         <div
-          className="px-8 py-6 pl-12 cursor-pointer"
-          onClick={() => openEditor(letter.id)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && openEditor(letter.id)}
+          className={`px-8 py-6 ${user ? 'pl-12 cursor-pointer' : ''}`}
+          onClick={user ? () => openEditor(letter.id) : undefined}
+          role={user ? 'button' : undefined}
+          tabIndex={user ? 0 : undefined}
+          onKeyDown={user ? (e) => e.key === 'Enter' && openEditor(letter.id) : undefined}
         >
           {/* Header */}
           <div className="flex items-start justify-between gap-4 mb-3">
@@ -94,39 +97,41 @@ export default function LetterCard({ letter }: LetterCardProps) {
             </div>
 
             {/* Actions */}
-            <div
-              className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => openEditor(letter.id)}
-                className="p-1.5 rounded-lg text-ink-400 hover:text-ink-700 hover:bg-ink-100 transition-colors"
-                aria-label="Edit letter"
+            {user && (
+              <div
+                className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                onClick={(e) => e.stopPropagation()}
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M10 2l2 2-7 7H3v-2l7-7z"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={() => setConfirmOpen(true)}
-                className="p-1.5 rounded-lg text-ink-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                aria-label="Delete letter"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M2 3.5h10M5.5 3.5V2.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1M11 3.5l-.7 7.5a.5.5 0 01-.5.5H4.2a.5.5 0 01-.5-.5L3 3.5"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </div>
+                <button
+                  onClick={() => openEditor(letter.id)}
+                  className="p-1.5 rounded-lg text-ink-400 hover:text-ink-700 hover:bg-ink-100 transition-colors"
+                  aria-label="Edit letter"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M10 2l2 2-7 7H3v-2l7-7z"
+                      stroke="currentColor"
+                      strokeWidth="1.3"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => setConfirmOpen(true)}
+                  className="p-1.5 rounded-lg text-ink-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                  aria-label="Delete letter"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M2 3.5h10M5.5 3.5V2.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1M11 3.5l-.7 7.5a.5.5 0 01-.5.5H4.2a.5.5 0 01-.5-.5L3 3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.3"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Content preview */}

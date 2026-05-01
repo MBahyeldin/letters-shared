@@ -44,3 +44,9 @@ export interface Toast {
   message: string;
   variant: ToastVariant;
 }
+
+export interface User {
+  id: string;
+  username: string;
+  createdAt: string;
+}

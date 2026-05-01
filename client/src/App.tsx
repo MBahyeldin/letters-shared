@@ -4,10 +4,14 @@ import { useWebSocket } from './hooks/useWebSocket';
 import Header from './components/layout/Header';
 import LetterList from './components/letters/LetterList';
 import LetterModal from './components/letters/LetterModal';
+import SignInModal from './components/auth/SignInModal';
 import ToastContainer from './components/ui/ToastContainer';
 
 function FloatingAddButton() {
   const openEditor = useLettersStore((s) => s.openEditor);
+  const user = useLettersStore((s) => s.user);
+
+  if (!user) return null;
 
   return (
     <button
@@ -28,6 +32,8 @@ function FloatingAddButton() {
 
 export default function App() {
   const fetchLetters = useLettersStore((s) => s.fetchLetters);
+  const signInModalOpen = useLettersStore((s) => s.signInModalOpen);
+  const closeSignInModal = useLettersStore((s) => s.closeSignInModal);
   useWebSocket();
 
   useEffect(() => {
@@ -54,6 +60,7 @@ export default function App() {
 
       <FloatingAddButton />
       <LetterModal />
+      <SignInModal open={signInModalOpen} onClose={closeSignInModal} />
       <ToastContainer />
     </div>
   );
