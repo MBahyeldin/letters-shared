@@ -130,7 +130,6 @@ function Toolbar() {
   const isEmActive = useEditorSelector(editor, isActiveDecorator('em'));
   const isUnderlineActive = useEditorSelector(editor, isActiveDecorator('underline'));
   const isStrikeActive = useEditorSelector(editor, isActiveDecorator('strike'));
-  const isHighlightActive = useEditorSelector(editor, isActiveDecorator('highlight'));
   const isCodeActive = useEditorSelector(editor, isActiveDecorator('code'));
   const isH1Active = useEditorSelector(editor, isActiveStyle('h1'));
   const isH2Active = useEditorSelector(editor, isActiveStyle('h2'));
