@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import { useLettersStore } from '../../store/lettersStore';
 import RichTextEditor from '../editor/RichTextEditor';
 import Button from '../ui/Button';
+import ConfirmDialog from '../ui/ConfirmDialog';
 import type { SaveStatus } from '../../types';
 import type { PortableTextBlock } from '@portabletext/editor';
 
@@ -30,6 +31,7 @@ export default function LetterModal() {
   const [contentJson, setContentJson] = useState<PortableTextBlock[]>(initialContent);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [isSaving, setIsSaving] = useState(false);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
 
   const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const createdIdRef = useRef<string | null>(null);
@@ -41,6 +43,19 @@ export default function LetterModal() {
   const existingLetterRef = useRef(existingLetter);
   existingLetterRef.current = existingLetter;
 
+  const handleBackdropClick = useCallback(() => {
+    setShowCloseConfirm(true);
+  }, []);
+
+  const handleConfirmClose = useCallback(() => {
+    setShowCloseConfirm(false);
+    closeEditor();
+  }, [closeEditor]);
+
+  const handleCancelClose = useCallback(() => {
+    setShowCloseConfirm(false);
+  }, []);
+
   // Populate form when editing existing letter
   useEffect(() => {
     // Clear any pending autosave when closing the modal
@@ -49,9 +64,11 @@ export default function LetterModal() {
         clearTimeout(autosaveTimer.current);
         autosaveTimer.current = null;
       }
+      setShowCloseConfirm(false);
       return;
     }
     
+    setShowCloseConfirm(false);
     if (existingLetter) {
       setTitle(existingLetter.title);
       setAuthor(existingLetter.author);
@@ -148,7 +165,7 @@ export default function LetterModal() {
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-ink-950/25 backdrop-blur-sm animate-fade-in"
-        onClick={closeEditor}
+        onClick={handleBackdropClick}
       />
 
       {/* Modal */}
@@ -246,6 +263,15 @@ export default function LetterModal() {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={showCloseConfirm}
+        title="Close without saving?"
+        message="You have unsaved changes. Are you sure you want to close this letter?"
+        confirmLabel="Close"
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
+      />
     </div>
   );
 }
